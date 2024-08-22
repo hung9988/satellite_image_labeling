@@ -37,8 +37,20 @@ for element in tiff_paths:
     parent = myvl.parent()
     group1.insertChildNode(0, myvlclone)
     parent.removeChildNode(myvl)
+    
+    for cat in categories:
+        vlayer = QgsVectorLayer(f"polygon?crs=epsg:4326", f"{element['name']}_{cat}", "memory")
+        shapefile_path = os.path.join(base_path, "data", f"{element['name']}_{cat}.shp")
+        error = QgsVectorFileWriter.writeAsVectorFormat(vlayer, shapefile_path, "UTF-8", vlayer.crs(), "ESRI Shapefile")
+        saved_layer = QgsVectorLayer(shapefile_path, f"{element['name']}_{cat}", "ogr")
 
-        
+        project.addMapLayer(saved_layer)
+        vl = QgsProject.instance().mapLayersByName(f"{element['name']}_{cat}")[0]
+        myvl = root.findLayer(vl.id())
+        myvlclone = myvl.clone()
+        group1.insertChildNode(0, myvlclone)
+        parent = myvl.parent()
+        parent.removeChildNode(myvl)
         
 project.write()
   
