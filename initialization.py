@@ -3,7 +3,7 @@
 from qgis.core import QgsProject
 import os
 
-categories=['forest','water','rice']
+categories=['forest','water','rice', 'urban']
 
 project = QgsProject.instance()
 project.read('C:/Users/hung/thanh_Hoa_Image/labeling_project.qgs')
